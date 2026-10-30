@@ -1,0 +1,11 @@
+node_modules/
+.next/
+out/
+next-env.d.ts
+*.tsbuildinfo
+coverage/
+# Environment files — never commit secrets
+.env
+.env.*
+!.env.example
+.DS_Store

@@ -1,0 +1,62 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [5 0 R 7 0 R] /Count 2 >>
+endobj
+3 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+4 0 obj
+<< /Length 737 >>
+stream
+BT /F1 11 Tf 14 TL 60 760 Td
+/F1 18 Tf (Harbourline Home Repairs Pty Ltd) Tj T*
+/F1 11 Tf (12 Example Street, Sampletown) Tj T*
+/F1 11 Tf () Tj T*
+/F1 14 Tf (TAX INVOICE  #HR-20481) Tj T*
+/F1 11 Tf (Invoice date: 28/10/2026) Tj T*
+/F1 11 Tf (Customer: Alex Sample) Tj T*
+/F1 11 Tf (Insurance policy number: CP-12345678) Tj T*
+/F1 11 Tf () Tj T*
+/F1 11 Tf (Description                                   Amount) Tj T*
+/F1 11 Tf (Kitchen ceiling repair after water leak       $820.00) Tj T*
+/F1 11 Tf (Plaster and paint materials                   $160.00) Tj T*
+/F1 11 Tf () Tj T*
+/F1 13 Tf (TOTAL AMOUNT DUE: $980.00) Tj T*
+/F1 11 Tf () Tj T*
+/F1 9 Tf (FICTIONAL TEST DOCUMENT - ClaimPilot AI portfolio demo. Not a real invoice.) Tj T*
+ET
+endstream
+endobj
+5 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R >> >> /Contents 4 0 R >>
+endobj
+6 0 obj
+<< /Length 182 >>
+stream
+BT /F1 11 Tf 14 TL 60 760 Td
+/F1 14 Tf (Page 2 - photos of damage \(fictional\)) Tj T*
+/F1 9 Tf (FICTIONAL TEST DOCUMENT - ClaimPilot AI portfolio demo. Not a real invoice.) Tj T*
+ET
+endstream
+endobj
+7 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R >> >> /Contents 6 0 R >>
+endobj
+xref
+0 8
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000121 00000 n 
+0000000191 00000 n 
+0000000979 00000 n 
+0000001105 00000 n 
+0000001338 00000 n 
+trailer
+<< /Size 8 /Root 1 0 R >>
+startxref
+1464
+%%EOF
