@@ -13,26 +13,26 @@ claim.** Every claim is reviewed by a person.
 
 ## What is actually implemented
 
-| Feature | Status | How it was verified |
-|---|---|---|
-| Customer portal: landing, dashboard, claim form, claims list, claim details | ✅ Implemented | Browser checks on desktop and mobile |
-| Client-side validation, accessible form, loading/empty/error states | ✅ | Browser checks (Phase 1) |
-| Direct browser → S3 upload through a presigned URL (no SDK) | ✅ | Real upload; size, type, public-read and plain-HTTP rejections all returned 403 |
-| Claims API (API Gateway REST + Lambda) with API key and usage plan | ✅ | `curl` and portal against the deployed API |
-| Claims stored in and read from DynamoDB; real statuses shown | ✅ | Status edited in DynamoDB appeared in the portal |
-| Automated document check (Bedrock Nova Lite extraction + rules + Nova Micro summary) | ✅ | Tests T1–T8 on real AWS ([record](docs/phase-3-ai-setup.md#verification-record-real-aws-2026-10-29)) |
-| Review-only outcomes ("ready for standard review" / "needs human review") | ✅ | T1 (ready) and T2, T3, T6, T8 (needs review) on real AWS |
-| Failure handling: unsupported PDF, page limit, model errors, timeouts, monthly cap | ✅ | T5, T6, T7 on real AWS; all paths in offline unit tests |
-| Dashboard with real claims, statuses and document-check results (Phase 4) | ✅ | Browser check against 15 real claims |
-| Claim page: review status, document metadata, extracted values **with quotes**, discrepancies | ✅ | Browser check against real claims |
-| Customer-safe errors (no AWS error types, ARNs or config names shown) | ✅ | Portal page source of failed claims contained none; live API response for `CLM-4EECDF6B9906` no longer includes `awsType` or `detail` |
-| Retry-safe submission (no duplicate uploads or claims) | ✅ | Full E2E on real AWS: identical replay → `200` with the same ID; changed details → `409`; exactly one stored copy |
-| Duplicate-processing guard (conditional lock, owner-only save) | ✅ | Unit tests; full E2E confirmed exactly one check entry in the claim's timeline |
-| "Try again" buttons on load/submit errors | ✅ load errors · ⚠️ submit errors | Load errors: API key set to Inactive → claims page showed "temporarily unavailable" with **Try again** and no AWS details; key reactivated → Try again loaded the claims (manual test, 2026-10-29). Submit errors: the retry path (reusing the uploaded PDF, idempotent replay) is covered by unit tests and the E2E replay check, but the button wasn't clicked against a real failure |
-| End-to-end test script against real AWS | ✅ | Full run 12/12 on 2026-10-29 (details under [Test evidence](#test-evidence)) |
-| Amazon Textract | ❌ Not used | Denied by the Free plan's AWS-managed service control policy (verified twice) |
-| User accounts / per-customer data isolation | ❌ Not implemented | See [Limitations](#limitations) |
-| Public deployment of the portal | ❌ Not done | — |
+| Feature                                                                                       | Status                            | How it was verified                                                                                                                                                                                                                                                                                                                                                                     |
+| --------------------------------------------------------------------------------------------- | --------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Customer portal: landing, dashboard, claim form, claims list, claim details                   | ✅ Implemented                    | Browser checks on desktop and mobile                                                                                                                                                                                                                                                                                                                                                    |
+| Client-side validation, accessible form, loading/empty/error states                           | ✅                                | Browser checks (Phase 1)                                                                                                                                                                                                                                                                                                                                                                |
+| Direct browser → S3 upload through a presigned URL (no SDK)                                   | ✅                                | Real upload; size, type, public-read and plain-HTTP rejections all returned 403                                                                                                                                                                                                                                                                                                         |
+| Claims API (API Gateway REST + Lambda) with API key and usage plan                            | ✅                                | `curl` and portal against the deployed API                                                                                                                                                                                                                                                                                                                                              |
+| Claims stored in and read from DynamoDB; real statuses shown                                  | ✅                                | Status edited in DynamoDB appeared in the portal                                                                                                                                                                                                                                                                                                                                        |
+| Automated document check (Bedrock Nova Lite extraction + rules + Nova Micro summary)          | ✅                                | Tests T1–T8 on real AWS ([record](docs/phase-3-ai-setup.md#verification-record-real-aws-2026-10-29))                                                                                                                                                                                                                                                                                    |
+| Review-only outcomes ("ready for standard review" / "needs human review")                     | ✅                                | T1 (ready) and T2, T3, T6, T8 (needs review) on real AWS                                                                                                                                                                                                                                                                                                                                |
+| Failure handling: unsupported PDF, page limit, model errors, timeouts, monthly cap            | ✅                                | T5, T6, T7 on real AWS; all paths in offline unit tests                                                                                                                                                                                                                                                                                                                                 |
+| Dashboard with real claims, statuses and document-check results (Phase 4)                     | ✅                                | Browser check against 15 real claims                                                                                                                                                                                                                                                                                                                                                    |
+| Claim page: review status, document metadata, extracted values **with quotes**, discrepancies | ✅                                | Browser check against real claims                                                                                                                                                                                                                                                                                                                                                       |
+| Customer-safe errors (no AWS error types, ARNs or config names shown)                         | ✅                                | Portal page source of failed claims contained none; live API response for `CLM-4EECDF6B9906` no longer includes `awsType` or `detail`                                                                                                                                                                                                                                                   |
+| Retry-safe submission (no duplicate uploads or claims)                                        | ✅                                | Full E2E on real AWS: identical replay → `200` with the same ID; changed details → `409`; exactly one stored copy                                                                                                                                                                                                                                                                       |
+| Duplicate-processing guard (conditional lock, owner-only save)                                | ✅                                | Unit tests; full E2E confirmed exactly one check entry in the claim's timeline                                                                                                                                                                                                                                                                                                          |
+| "Try again" buttons on load/submit errors                                                     | ✅ load errors · ⚠️ submit errors | Load errors: API key set to Inactive → claims page showed "temporarily unavailable" with **Try again** and no AWS details; key reactivated → Try again loaded the claims (manual test, 2026-10-29). Submit errors: the retry path (reusing the uploaded PDF, idempotent replay) is covered by unit tests and the E2E replay check, but the button wasn't clicked against a real failure |
+| End-to-end test script against real AWS                                                       | ✅                                | Full run 12/12 on 2026-10-29 (details under [Test evidence](#test-evidence))                                                                                                                                                                                                                                                                                                            |
+| Amazon Textract                                                                               | ❌ Not used                       | Denied by the Free plan's AWS-managed service control policy (verified twice)                                                                                                                                                                                                                                                                                                           |
+| User accounts / per-customer data isolation                                                   | ❌ Not implemented                | See [Limitations](#limitations)                                                                                                                                                                                                                                                                                                                                                         |
+| Public deployment of the portal                                                               | ❌ Not done                       | —                                                                                                                                                                                                                                                                                                                                                                                       |
 
 ## Architecture
 
@@ -54,27 +54,30 @@ flowchart LR
 
 ### AWS service responsibilities
 
-| Service | Responsibility |
-|---|---|
-| **S3** `claim-pilot` | Private PDF storage: SSE-S3 encryption, HTTPS-only bucket policy, CORS for `localhost:3000` PUT only, 30-day expiry on `uploads/` |
-| **API Gateway** (REST) `claimpilot-api` / `v1` | Public HTTPS entry point. API key required on every method; usage plan with 5 req/s and 500 req/day |
-| **Lambda** `claimpilot-api` | Validates input; creates presigned PUT URLs; verifies uploads (first 5 bytes); stores and reads claims; idempotent replays; strips internal errors from responses |
-| **DynamoDB** `claimpilots-claim` | Claim records, processing results and monthly usage counters. Provisioned 5/5 (Always Free). The stream triggers processing |
-| **Lambda** `claimpilot-processor` | Locks the claim, enforces the monthly cap, sends the PDF to Bedrock, runs rule checks, saves the result |
-| **Bedrock** | Nova Lite (`apac.amazon.nova-lite-v1:0`) reads the PDF and returns fields with quotes. Nova Micro (`apac.amazon.nova-micro-v1:0`) writes the explanation and answers "does the document fit the incident?" |
-| **IAM** | Two least-privilege roles: no delete actions, scoped to one bucket prefix, one table and two models |
-| **CloudWatch Logs** | Lambda logs with request IDs (3-day retention) |
+| Service                                        | Responsibility                                                                                                                                                                                             |
+| ---------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **S3** `claim-pilot`                           | Private PDF storage: SSE-S3 encryption, HTTPS-only bucket policy, CORS for `localhost:3000` PUT only, 30-day expiry on `uploads/`                                                                          |
+| **API Gateway** (REST) `claimpilot-api` / `v1` | Public HTTPS entry point. API key required on every method; usage plan with 5 req/s and 500 req/day                                                                                                        |
+| **Lambda** `claimpilot-api`                    | Validates input; creates presigned PUT URLs; verifies uploads (first 5 bytes); stores and reads claims; idempotent replays; strips internal errors from responses                                          |
+| **DynamoDB** `claimpilots-claim`               | Claim records, processing results and monthly usage counters. Provisioned 5/5 (Always Free). The stream triggers processing                                                                                |
+| **Lambda** `claimpilot-processor`              | Locks the claim, enforces the monthly cap, sends the PDF to Bedrock, runs rule checks, saves the result                                                                                                    |
+| **Bedrock**                                    | Nova Lite (`apac.amazon.nova-lite-v1:0`) reads the PDF and returns fields with quotes. Nova Micro (`apac.amazon.nova-micro-v1:0`) writes the explanation and answers "does the document fit the incident?" |
+| **IAM**                                        | Two least-privilege roles: no delete actions, scoped to one bucket prefix, one table and two models                                                                                                        |
+| **CloudWatch Logs**                            | Lambda logs with request IDs (3-day retention)                                                                                                                                                             |
 
 ## Security considerations
+
 - **No AWS credentials in the browser.**
   - The portal holds only an API Gateway key, in server-only env vars (`import "server-only"`). A build containing a canary key was checked: the key never appeared in browser bundles.
   - Lambdas use their roles' temporary credentials.
 - **Presigned uploads are narrow:**
+
   - one server-chosen key (`uploads/<uuid>.pdf`)
   - the signed `Content-Type` and `Content-Length`
   - 300-second expiry
-  
+
   The URL carries the Lambda role's temporary session token, which is standard for presigned URLs. The role can't do more than put and get objects under `uploads/`.
+
 - **Private bucket:** Block Public Access is on, plus an HTTPS-only policy. Unsigned reads return 403 (tested).
 - **The server never trusts the browser.**
   - The API re-validates every field.
@@ -104,6 +107,7 @@ npm run dev                   # http://localhost:3000 (must be port 3000 for S3 
 Without `.env.local`, the portal runs and honestly reports "claims service not available". Nothing is faked.
 
 **AWS setup (Console only)**, step by step with exact settings and IAM policies:
+
 1. [docs/phase-2-aws-setup.md](docs/phase-2-aws-setup.md): S3, DynamoDB, IAM, `claimpilot-api` Lambda, API Gateway
 2. [docs/phase-3-ai-setup.md](docs/phase-3-ai-setup.md): DynamoDB stream, `claimpilot-processor` Lambda, Bedrock
 
@@ -111,14 +115,15 @@ Lambda code to paste into the console: `aws/lambda/claimpilot-api/index.mjs`, `a
 
 ## Testing
 
-| Command | What it does | Touches AWS? |
-|---|---|---|
-| `npm run typecheck` / `npm run lint` | TypeScript and ESLint | No |
-| `npm test` | 24 offline unit tests for both Lambdas, with AWS responses stubbed | No |
-| `npm run test:e2e` | Real API, S3 and DynamoDB checks: auth, validation, 404/422, presigned-URL tampering, private bucket. **Creates no claims, calls no AI** | Yes (~10 API requests) |
-| `npm run test:e2e:full` | Adds 2 real submissions: upload → save → idempotent replay → processing → retrieval, plus a mismatch case | Yes (~6k Bedrock tokens) |
+| Command                              | What it does                                                                                                                             | Touches AWS?             |
+| ------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `npm run typecheck` / `npm run lint` | TypeScript and ESLint                                                                                                                    | No                       |
+| `npm test`                           | 24 offline unit tests for both Lambdas, with AWS responses stubbed                                                                       | No                       |
+| `npm run test:e2e`                   | Real API, S3 and DynamoDB checks: auth, validation, 404/422, presigned-URL tampering, private bucket. **Creates no claims, calls no AI** | Yes (~10 API requests)   |
+| `npm run test:e2e:full`              | Adds 2 real submissions: upload → save → idempotent replay → processing → retrieval, plus a mismatch case                                | Yes (~6k Bedrock tokens) |
 
 ### Test evidence
+
 - **Unit tests:** 24/24 passing, including:
   - AWS's published SigV4 examples (GET, PUT, presigned)
   - validation and upload checks
@@ -148,9 +153,10 @@ Lambda code to paste into the console: `aws/lambda/claimpilot-api/index.mjs`, `a
     - Nova Micro `37af6d8a-…` (922/98 tokens)
   - **Mismatched invoice:** `CLM-034A810E7656` flagged with 2 inconsistencies
   - **Plus all 8 safe checks**
-- **Honest note:** an earlier full run that day failed 3/12. The new API code had been pasted into the processor Lambda by mistake, so the processor ignored stream events. That left two `[E2E TEST]` claims (`CLM-608FAD2E30BA`, `CLM-9D0F3724FE3F`) permanently *pending*. They're kept as a record; there's no reprocess path (see Limitations).
+- **Honest note:** an earlier full run that day failed 3/12. The new API code had been pasted into the processor Lambda by mistake, so the processor ignored stream events. That left two `[E2E TEST]` claims (`CLM-608FAD2E30BA`, `CLM-9D0F3724FE3F`) permanently _pending_. They're kept as a record; there's no reprocess path (see Limitations).
 
 ## Limitations
+
 - **No authentication:**
   - all claims sit in one shared demo list
   - real use needs sign-in (e.g. Cognito) and a per-user partition key with `Query` instead of `Scan`
@@ -169,6 +175,7 @@ Lambda code to paste into the console: `aws/lambda/claimpilot-api/index.mjs`, `a
 - **CORS** allows only `http://localhost:3000`.
 
 ## Cost
+
 - **Always free:** Lambda, DynamoDB (provisioned 5/5), CloudWatch Logs (3-day retention), and the stream trigger.
 - **Paid from Free-plan credits (approved), a fraction of a cent so far:**
   - API Gateway requests
@@ -182,6 +189,7 @@ Lambda code to paste into the console: `aws/lambda/claimpilot-api/index.mjs`, `a
 - **The Free plan can't be charged.** Credits expire with the account on 2027-04-14.
 
 ## Resources and cleanup
+
 See [docs/aws-resources-and-cleanup.md](docs/aws-resources-and-cleanup.md) for the full inventory, how to pause (reversible), and the safe deletion order.
 
 ## Project structure
@@ -198,7 +206,9 @@ docs/                    setup guides, architecture, ADRs, demo walkthrough, cle
 ```
 
 ## Design decisions
+
 See the ADRs:
+
 - [0001 frontend-only Phase 1](docs/adr/0001-phase-1-frontend-only.md)
 - [0002 claims API without SDK](docs/adr/0002-phase-2-aws-claims-api.md)
 - [0003 document check (Textract → Bedrock)](docs/adr/0003-phase-3-document-check.md)
